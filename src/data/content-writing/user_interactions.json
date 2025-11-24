@@ -1,0 +1,11 @@
+{
+  "User interactions": {
+    "Log in or log on, sign in or sign up?": "Use 'sign in' and 'sign up' for clarity and modern tone. Consistency reduces user confusion.",
+    "Allow or enable?": "'Allow' relates to permissions; 'enable' activates features. Match wording to intent.",
+    "Delete, cancel/discard or archive?": "Clarify permanence and recovery. Use 'delete' for permanent removal, 'archive' for hidden retrievability, and 'discard' for form actions.",
+    "Void or refund?": "'Void' stops unprocessed transactions. 'Refund' returns money after processing. Precision builds trust.",
+    "Choose or select?": "'Choose' is conversational; 'select' is formal and UI\u2011specific. Align tone with product voice.",
+    "Tap/Click, touch, press or hold?": "Use platform\u2011specific terms. Maintain consistency for user clarity.",
+    "Try again or retry?": "'Try again' is friendly; 'retry' is technical. Choose based on tone context."
+  }
+}

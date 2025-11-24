@@ -1,0 +1,18 @@
+{
+  "Our voice": {
+    "Principles": {
+      "Text should have a purpose": "Remove fluff. Each word must serve clarity and user progress.",
+      "Be explicit, be direct": "State things plainly. Avoid ambiguity and unnecessary politeness that hides meaning.",
+      "Focus on value and benefits, not features": "Explain why it matters. Users care about outcomes, not specs.",
+      "There is no default knowledge": "Never assume user expertise. Explain essentials without jargon.",
+      "Prefer the positive": "Phrase for confidence and success. Avoid fear\u2011based wording.",
+      "Success instead of fear, doubt and uncertainty": "Encourage and reassure. Celebrate progress, don't highlight failure."
+    },
+    "Tone": {
+      "Be helpful": "Give clear guidance and next steps. Reduce cognitive effort.",
+      "Be empowering": "Make users feel capable. Language should support autonomy.",
+      "Be empathetic": "Acknowledge emotions in errors or friction. Use human warmth.",
+      "Be confident": "Write assertively. Avoid hedging words that reduce trust."
+    }
+  }
+}

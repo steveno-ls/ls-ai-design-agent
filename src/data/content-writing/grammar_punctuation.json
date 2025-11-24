@@ -1,0 +1,31 @@
+{
+  "Grammar and punctuation": {
+    "Grammar": {
+      "Abbreviations and acronyms": "Spell out first use; avoid unnecessary acronyms. Maintain clarity.",
+      "Ampersands": "Use '&' only in UI constraints (buttons, labels). Prefer 'and' in sentences.",
+      "Articles (a, an, the)": "Use articles to improve readability and natural tone. Avoid omission for brevity.",
+      "Capitalization": "Follow sentence\u2011case for readability. Reserve title\u2011case for proper nouns and UI titles.",
+      "Contractions": "Use natural contractions for friendly tone. Avoid stiffness.",
+      "It's and its": "'It's' = 'it is'. 'Its' = possession. Avoid common confusion.",
+      "Noun stacks": "Limit consecutive nouns to avoid cognitive load. Use prepositions to clarify.",
+      "Plurals": "Pluralize naturally. Avoid jargon or awkward plural forms.",
+      "Spelling": "Use consistent regional spelling (likely US English). Avoid informal shortcuts.",
+      "Simple past vs. Present perfect": "Use simple past for completed actions; present perfect for recent relevance.",
+      "Syllable separation": "Hyphenate only where clarity improves. Avoid over\u2011hyphenation."
+    },
+    "Punctuation": {
+      "Colons": "Use to introduce lists or clarifications. Avoid overuse.",
+      "Commas": "Support readability; use in lists and clauses. Avoid comma splices.",
+      "Dashes": "En dashes for ranges, em dashes for emphasis. Use sparingly.",
+      "Ellipses": "Use for unfinished thoughts, not pauses. Avoid dramatic overuse.",
+      "Emojis \ud83e\udd20": "Use sparingly and only when tone supports. Ensure accessibility.",
+      "Exclamation marks": "Use rarely. Avoid sounding unprofessional or emotional.",
+      "Hyphens": "Use to clarify compound terms. Avoid unnecessary connection.",
+      "Parentheses": "Use for clarifications. Avoid burying key info inside.",
+      "Periods": "End full thoughts cleanly. Avoid missing punctuation.",
+      "Possessives": "Follow standard possessive rules. Avoid awkward constructions.",
+      "Quotation marks": "Use for direct quotes and UI terms. Avoid scare quotes.",
+      "Semicolons": "Use to link related independent clauses. Avoid excessive formality."
+    }
+  }
+}

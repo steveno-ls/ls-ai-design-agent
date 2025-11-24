@@ -1,0 +1,146 @@
+.chatInputContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tab {
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.activeSystem {
+  background: #3a1afe;
+  color: white;
+  border: none;
+}
+
+.activeDesign {
+  background: #e8562b;
+  color: white;
+  border: none;
+}
+
+.activeContent {
+  background: #c71ed5;
+  color: white;
+  border: none;
+}
+
+/* Input Row */
+.inputRow {
+  bottom: 1.5rem;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  background-color: #fff;
+  gap: 8px;
+  padding: 8px 8px 8px 0px;
+  border-radius: 12px;
+  transition: outline 0.2s, box-shadow 0.2s;
+  border: 1px solid #e3e4e9;
+}
+
+
+.input {
+  flex: 1;
+  color: var(--text-primary);
+  background-color: #fff;
+  padding: 12px 12px;
+  border: none;
+  font-size: 16px;
+}
+
+.activeInputSystem:focus-within {
+  outline: 1px solid #3a1afe;
+  box-shadow: 0px 0px 4px #3a1afe;
+}
+.activeInputDesign:focus-within{
+ outline: 1px solid #e8562b;
+  box-shadow: 0px 0px 4px #e8562b;
+}
+.activeInputContent:focus-within{
+ outline: 1px solid #c71ed5;
+  box-shadow: 0px 0px 4px #c71ed5;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.sendButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  color: white;
+  transition: background 0.2s ease;
+}
+
+.sendButtonHide {
+  display: none;
+}
+
+.sendButton:disabled {
+  opacity: 0.5;
+}
+
+.system {
+  background: #3a1afe;
+  border: none;
+}
+
+.system:hover {
+  background: #4f46e5;
+}
+
+.design {
+  background: #e8562b;
+}
+
+.design:hover {
+  background: #ea580c;
+}
+
+.content {
+  background: #c71ed5;
+}
+
+.content:hover {
+  background: #9333ea;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Footer */
+.footer {
+  font-size: 0.8rem;
+  color: #64748b;
+  text-align: center;
+}

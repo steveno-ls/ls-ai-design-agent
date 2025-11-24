@@ -1,0 +1,9 @@
+{
+  "Errors and alerts": {
+    "Inline messaging": "Show specific, actionable fixes near inputs. Keep short and calm.",
+    "Dialogue modals": "Use for critical decisions or interruptions. Be concise and respectful of time.",
+    "Banner alerts": "Communicate high\u2011level updates. Avoid overuse; maintain clarity distinctions.",
+    "Toasters": "Give quick, temporary feedback. Avoid requiring dismissal unless necessary.",
+    "Page errors": "Humanize and guide recovery. Avoid technical jargon; offer solutions."
+  }
+}

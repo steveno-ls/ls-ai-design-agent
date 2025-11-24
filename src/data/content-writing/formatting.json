@@ -1,0 +1,40 @@
+{
+  "Formatting": {
+    "Browser tabs": "Use clear tab titles reflecting task or page. Prioritize user orientation.",
+    "Dates and time": {
+      "Dates": "Use readable formats and avoid ambiguity (e.g., Jan 1, 2025).",
+      "Time": "Use 12h or 24h consistently. Include timezone when relevant.",
+      "Date and time together": "Combine clearly (e.g., Jan 1, 2025 at 3:00 PM)."
+    },
+    "Empty fields": {
+      "Best practices": "Use placeholder text sparingly. Labels must remain visible.",
+      "Content guidelines and examples": "Provide sample inputs when helpful but avoid misleading examples."
+    },
+    "Empty states": {
+      "Golden rules": "Use empty states to inform, guide, and encourage first actions.",
+      "Guidelines": "Provide actionable steps, avoid blame, and keep tone optimistic."
+    },
+    "File details": {
+      "File extensions": "Display only when needed for clarity. Support recognition.",
+      "User-uploaded files": "Use clear error and success states. Support preview when possible."
+    },
+    "Form fields": {
+      "Name": "Support diverse naming conventions. Avoid assumptions.",
+      "Address": "Format international-friendly fields. Avoid strict locale assumptions.",
+      "Email": "Use simple validation rules. Communicate errors clearly."
+    },
+    "Links": {
+      "Referring users to the Help Center": "Explain why you're sending users there. Avoid dumping."
+    },
+    "Numbers, units and currencies": {
+      "Numbers": "Use numerals for clarity in UI. Support grouping and decimals.",
+      "Units of measurement": "Use SI units and abbreviations clearly. Avoid mixing systems.",
+      "Currencies": "Show currency symbol and code where needed. Support localization.",
+      "Phone numbers": "Use international\u2011friendly formats. Allow flexible input.",
+      "Credit card numbers and other PII": "Mask sensitive data, show only necessary digits."
+    },
+    "Text formatting": {
+      "Bold vs. italics": "Use bold sparingly to emphasize key points. Avoid italics in dense UI."
+    }
+  }
+}
