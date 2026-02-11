@@ -1,35 +1,20 @@
-/**
- * parseStorybookIndex.ts
- *
- * Takes Storybook's index.json and normalizes it into a cleaner shape
- * for easy lookup and AI reference.
- *
- * Usage:
- *   import { parseStorybookIndex } from "@/lib/parseStorybookIndex";
- *   const data = await fetch("https://your-storybook-url/index.json").then(r => r.json());
- *   const parsed = parseStorybookIndex(data, "https://your-storybook-url");
- */
-
-//
-// 1️⃣ Type definitions
-//
-
+// lib/parseStoryBookIndex.ts
 export type RawStorybookEntry = {
   id: string;
-  title: string; // e.g. "Components/Button"
+  title: string;
   type: "docs" | "story";
-  name?: string; // e.g. "Primary"
+  name?: string;
   importPath?: string;
 };
 
 export type ParsedStorybookEntry = {
   id: string;
-  kind: string; // same as title, e.g. "Components/Button"
+  kind: string;
   type: "docs" | "story";
   storyName?: string | null;
-  url: string; // full Storybook URL
-  component: string; // e.g. "Button"
-  section: string; // e.g. "Components"
+  url: string;
+  component: string;
+  section: string; 
   importPath?: string;
 };
 
@@ -39,10 +24,6 @@ export type ParsedStorybookIndex = {
   byComponent: Record<string, ParsedStorybookEntry[]>;
   bySection: Record<string, ParsedStorybookEntry[]>;
 };
-
-//
-// 2️⃣ Main parser
-//
 
 export function parseStorybookIndex(
   index: { entries: Record<string, RawStorybookEntry> },
@@ -71,10 +52,6 @@ export function parseStorybookIndex(
     };
   });
 
-  //
-  // 3️⃣ Build helper maps for fast lookup
-  //
-
   const byId: Record<string, ParsedStorybookEntry> = Object.fromEntries(
     list.map((x) => [x.id, x])
   );
@@ -93,14 +70,6 @@ export function parseStorybookIndex(
   return { list, byId, byComponent, bySection };
 }
 
-//
-// 4️⃣ Optional helper: fuzzy search
-//
-
-/**
- * Very simple text search over component names, titles, and stories.
- * Returns a ranked list of matches.
- */
 export function searchStorybookEntries(
   parsed: ParsedStorybookIndex,
   query: string

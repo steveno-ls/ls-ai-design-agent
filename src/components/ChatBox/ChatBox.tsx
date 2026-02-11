@@ -1,11 +1,18 @@
+// component/ChatBox/ChatBox.tsx
+
+"use client";
+
 import React, { useRef } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import styles from "./ChatBox.module.css";
+import renderMessageContent from "@/components/ChatBox/renderMessageContent";
+import LivePreview from "@/components/ChatBox/LivePreview";
 
 interface Message {
   sender: "user" | "ai";
   text: string;
+  data?: {
+    livePreviewCode?: string | null;
+  };
 }
 
 interface ChatBoxProps {
@@ -25,35 +32,13 @@ const ChatBox: React.FC<ChatBoxProps> = ({ messages, loading = false }) => {
         >
           {m.sender === "ai" ? (
             <div className={styles.markdown}>
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  img: ({ node, ...props }) => (
-                    <img
-                      {...props}
-                      style={{
-                        maxWidth: "100%",
-                        borderRadius: "8px",
-                        marginTop: "8px",
-                      }}
-                      alt="component preview"
-                    />
-                  ),
-                  a: ({ node, ...props }) => (
-                    <a
-                      {...props}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        color: "#0070f3",
-                        textDecoration: "underline",
-                      }}
-                    />
-                  ),
-                }}
-              >
-                {m.text}
-              </ReactMarkdown>
+              {renderMessageContent(m.text)}
+
+              {m.data?.livePreviewCode ? (
+                <div className="my-4">
+                  <LivePreview code={m.data.livePreviewCode} />
+                </div>
+              ) : null}
             </div>
           ) : (
             <span>{m.text}</span>

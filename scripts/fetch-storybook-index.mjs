@@ -2,8 +2,9 @@ import fs from "fs";
 import path from "path";
 
 // 🔧 URL to your Storybook build
-const STORYBOOK_BASE = "https://lightspeed.github.io/unified-components/react";
-const INDEX_URL = `${STORYBOOK_BASE}/index.json`;
+const STORYBOOK_BASE_v2 = "https://lightspeed.github.io/unified-components/react";
+const STORYBOOK_BASE_V1 = "https://helios.lightspeed.app/storybook";
+const INDEX_URL = `${STORYBOOK_BASE_V2}/index.json`;
 
 // 📁 Where to save the local cache
 const OUTPUT_PATH = path.resolve("./public/design-system/index.json");

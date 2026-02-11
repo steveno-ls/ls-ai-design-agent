@@ -1,61 +1,97 @@
+// src/lib/search.ts
 import Fuse from "fuse.js";
+import { tokenizeQuery, pickBest, scoreLabel } from "@/lib/figmaSearch";
+import { getFigmaLiveIndex } from "@/lib/figmaIndex";
 
-// Basic caching
-let cacheData: any[] = [];
-let lastFetched = 0;
+function pickTopPages(index: any[], query: string, maxPages = 3) {
+  const tokens = tokenizeQuery(query);
 
-export async function getLiveIndex() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-  const now = Date.now();
+  const pages = Array.from(new Set(index.map((i) => i.page).filter(Boolean)));
 
-  if (now - lastFetched < 60_000 && cacheData.length) return cacheData;
+  const scoredPages = pages
+    .map((p) => ({ p, score: scoreLabel(tokens, p) }))
+    .sort((a, b) => b.score - a.score)
+    .filter((x) => x.score > 0)
+    .slice(0, maxPages)
+    .map((x) => x.p);
 
-  const res = await fetch(`${baseUrl}/api/figma`, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Figma index failed: ${res.status}`);
-
-  const data = await res.json();
-
-  // Normalize names for better search (strip punctuation, lowercase, etc.)
-  cacheData = data.components.map((c: any) => {
-    const normalized = c.name
-      .replace(/[=,_]/g, " ") // replace = and , with spaces
-      .replace(/\s+/g, " ") // collapse extra spaces
-      .toLowerCase();
-    return { ...c, normalized };
-  });
-
-  lastFetched = now;
-  console.log(`🔍 Loaded ${cacheData.length} components from Figma`);
-  return cacheData;
+  return scoredPages;
 }
 
-export async function findBestComponent(query: string) {
-  const index = await getLiveIndex();
+export async function getLiveIndex(fileKey?: string) {
+  const index = await getFigmaLiveIndex(fileKey);
+  console.log(`🔍 Loaded ${index.length} components from Figma`);
+  return index;
+}
+
+export async function findBestComponent(query: string, fileKey?: string) {
+  const index = await getLiveIndex(fileKey);
   if (!index?.length) return null;
 
-  const fuse = new Fuse(index, {
-    keys: ["name", "normalized"],
-    threshold: 0.45,
+  const q = (query || "").trim();
+  if (!q) return null;
+
+  const topPages = pickTopPages(index, q, 3);
+  const scoped = topPages.length
+    ? index.filter((i) => topPages.includes(i.page))
+    : index;
+
+  const fuse = new Fuse(scoped, {
+    keys: ["name", "normalized", "page", "frame", "path"],
+    threshold: 0.55,
     ignoreLocation: true,
   });
 
-  const results = fuse.search(query.toLowerCase());
-  console.log("🔍 Searching for:", query, "→ Found:", results.length);
-  return results[0]?.item || null;
+  const pool = fuse.search(q.toLowerCase(), { limit: 50 }).map((r) => r.item);
+  if (!pool.length) return null;
+
+  const tokens = tokenizeQuery(q);
+
+  const scored = pool
+    .map((item: any) => {
+      const label = `${item.page || ""} ${item.frame || ""} ${item.name || ""} ${item.path || ""}`;
+      return { item, score: scoreLabel(tokens, label) };
+    })
+    .sort((a, b) => b.score - a.score);
+
+  return scored[0]?.score ? scored[0].item : pool[0];
 }
 
-export async function listCloseComponents(query: string, limit = 3) {
-  const index = await getLiveIndex();
+export async function listCloseComponents(
+  query: string,
+  limit = 3,
+  fileKey?: string,
+) {
+  const index = await getLiveIndex(fileKey);
   if (!index?.length) return [];
-  const fuse = new Fuse(index, {
-    keys: ["name", "normalized"],
-    threshold: 0.5,
+
+  const q = (query || "").trim();
+  if (!q) return [];
+
+  const topPages = pickTopPages(index, q, 3);
+  const scoped = topPages.length
+    ? index.filter((i) => topPages.includes(i.page))
+    : index;
+
+  const fuse = new Fuse(scoped, {
+    keys: ["name", "normalized", "page", "frame", "path"],
+    threshold: 0.6,
     ignoreLocation: true,
   });
-  return fuse.search(query.toLowerCase(), { limit }).map((r) => r.item);
+
+  const pool = fuse.search(q.toLowerCase(), { limit: 50 }).map((r) => r.item);
+  const tokens = tokenizeQuery(q);
+
+  return pool
+    .map((item: any) => {
+      const label = `${item.page || ""} ${item.frame || ""} ${item.name || ""} ${item.path || ""}`;
+      return { item, score: scoreLabel(tokens, label) };
+    })
+    .sort((a, b) => b.score - a.score)
+    .map((x) => x.item)
+    .slice(0, limit);
 }
 
-// Dummy explainToken (you can replace with your real token logic)
 export function explainToken(name: string) {
   const lower = name.toLowerCase();
   if (lower.includes("color") || lower.includes("colour")) {
@@ -86,32 +122,55 @@ export function explainToken(name: string) {
   return null;
 }
 
-export async function searchDesignSystem(query: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-  const res = await fetch(
-    `${baseUrl}/api/design-system/search?q=${encodeURIComponent(query)}`,
-    {
-      cache: "no-store",
-    }
-  );
-  if (!res.ok) {
-    throw new Error(`Failed to search design system: ${res.status}`);
-  }
+type IndexedComponent = {
+  id: string;
+  name: string;
+  description?: string;
+  fileKey: string;
+  page: string;
+  frame: string;
+  path?: string;
+  figmaUrl?: string;
+  imageUrl?: string;
+};
 
-  const data = await res.json();
-  if (!data.results?.length) {
-    return { message: `No matching components found for "${query}".` };
-  }
+export function pickBestComponentPageFirst(
+  query: string,
+  components: IndexedComponent[],
+  maxPages = 3,
+  maxCandidates = 50,
+) {
+  const tokens = tokenizeQuery(query);
 
-  // Build a markdown-friendly list
-  const lines = data.results.slice(0, 5).map((r: any) => {
-    return `- [${r.kind}](${r.url}) (${r.type})`;
-  });
+  const uniquePages = Array.from(new Set(components.map((c) => c.page)));
+  const pageRank = pickBest(tokens, uniquePages, (p) => p);
+
+  const topPages = pageRank.scored
+    .filter((p) => p.score > 0)
+    .slice(0, maxPages)
+    .map((p) => p.item);
+
+  const inScope = topPages.length
+    ? components.filter((c) => topPages.includes(c.page))
+    : components;
+
+  const scored = inScope
+    .map((c) => {
+      const label = `${c.page} ${c.frame} ${c.name} ${c.path || ""}`;
+      return { c, label };
+    })
+    .map(({ c, label }) => ({
+      ...c,
+      _score: pickBest(tokens, [label], (x) => x).scored[0]?.score || 0,
+    }))
+    .sort((a, b) => (b._score || 0) - (a._score || 0))
+    .slice(0, maxCandidates);
+
+  const best = scored[0] && scored[0]._score > 0 ? scored[0] : null;
 
   return {
-    message: `**Results for "${query}"**\n${lines.join("\n")}`,
+    best,
+    candidates: scored,
+    debug: { topPages, tokens },
   };
 }
-
-
-

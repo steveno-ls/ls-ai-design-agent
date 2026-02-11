@@ -8,27 +8,30 @@ interface Message {
   sender: "user" | "ai";
   text: string;
   data?: {
-    name?: string;
-    figmaUrl?: string;
-    storybookUrl?: string;
-    preview?: string;
-    section?: string;
+    componentName?: string;
+    summary?: string;
+    usage?: string;
+    livePreviewCode?: string | null;
+    links?: {
+      figma?: string | null;
+      docs?: string | null;
+      storybook?: string | null;
+    };
   };
 }
-
-type Mode = "system" | "design" | "content";
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [mode, setMode] = useState<Mode>("system");
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to bottom when messages update
+  const hasStarted = messages.length > 0;
+
   useEffect(() => {
+    if (!hasStarted) return;
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, hasStarted]);
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -42,19 +45,20 @@ export default function ChatPage() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: newMessage.text,
-          mode, // 👈 send the mode
-        }),
+        body: JSON.stringify({ message: newMessage.text }),
       });
 
       const data = await res.json();
 
       setMessages((prev) => [
         ...prev,
-        { sender: "ai", text: data.reply || "No response." },
+        {
+          sender: "ai",
+          text: data.reply || "No response.",
+          data: data.data, // ✅ includes livePreviewCode + links + etc
+        },
       ]);
-    } catch (e) {
+    } catch {
       setMessages((prev) => [
         ...prev,
         { sender: "ai", text: "⚠️ Something went wrong. Try again." },
@@ -66,20 +70,39 @@ export default function ChatPage() {
 
   return (
     <main className={styles.main}>
-      <div className={styles.container}>
-        <div className={styles.content}>
-          <ChatBox messages={messages} loading={loading} />
-        </div>
-        <div className={styles.inputContainer}>
-          <ChatInput
-            value={input}
-            onChange={setInput}
-            onSend={() => handleSend()}
-            loading={loading}
-            activeTab={mode}
-            setActiveTab={setMode}
-          />
-        </div>
+      <div className={hasStarted ? styles.chatShell : styles.landingShell}>
+        {!hasStarted ? (
+          // Landing (centered)
+          <div className={styles.landing}>
+            <img src="/helios.svg" alt="Helios logo" className={styles.logo} />
+
+            <div className={styles.landingInput}>
+              <ChatInput
+                value={input}
+                onChange={setInput}
+                onSend={handleSend}
+                loading={loading}
+              />
+            </div>
+          </div>
+        ) : (
+          // Chat (input pinned bottom)
+          <>
+            <div className={styles.chatBody}>
+              <ChatBox messages={messages} loading={loading} />
+              <div ref={chatEndRef} />
+            </div>
+
+            <div className={styles.chatFooter}>
+              <ChatInput
+                value={input}
+                onChange={setInput}
+                onSend={handleSend}
+                loading={loading}
+              />
+            </div>
+          </>
+        )}
       </div>
     </main>
   );
