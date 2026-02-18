@@ -1,9 +1,92 @@
 {
-  "Errors and alerts": {
-    "Inline messaging": "Show specific, actionable fixes near inputs. Keep short and calm.",
-    "Dialogue modals": "Use for critical decisions or interruptions. Be concise and respectful of time.",
-    "Banner alerts": "Communicate high\u2011level updates. Avoid overuse; maintain clarity distinctions.",
-    "Toasters": "Give quick, temporary feedback. Avoid requiring dismissal unless necessary.",
-    "Page errors": "Humanize and guide recovery. Avoid technical jargon; offer solutions."
+  "errors_alerts": {
+    "overview": "Errors and alerts can be a moment of friction and stress for users. Make these moments easier and instructive by crafting copy that lets users know what’s happening and how to move forward.",
+    "dont_forget": [
+      "Content flows and patterns should try to steer users away from potential error states.",
+      "Errors and alerts benefit from advanced planning. Identify as many potential error states as possible in the design phase."
+    ],
+    "golden_rules": [
+      "Use the active voice.",
+      "Tell the user what they should do to have an optimal experience.",
+      "Make it clear what the user needs to do next.",
+      "Be concise. Keep it as short as possible."
+    ],
+    "avoid_language": [
+      {
+        "terms": ["Error", "failed"],
+        "reason": "Too alarming."
+      },
+      {
+        "terms": ["please", "sorry"],
+        "reason": "Too formal and insincere."
+      },
+      {
+        "terms": ["successfully"],
+        "reason": "Redundant."
+      }
+    ],
+    "punctuation": {
+      "headers": "Use a period only if there is more than one sentence.",
+      "body": "Always use periods."
+    },
+    "exclamation_points": "Use exclamation points sparingly—only if the information is genuinely exciting or the user just finished a lengthy task.",
+    "patterns": {
+      "inline_messaging": {
+        "definition": "Inline messages aren’t written using a new component (like a modal or banner) but are written directly into an existing one. They rely on UI cues to interrupt the user and demand action. The design should communicate what went wrong and immediately explain how to move forward.",
+        "recommended": [
+          "Use UI cues in addition to color for accessibility.",
+          "Show specific, actionable fixes near inputs.",
+          "Keep it short and calm."
+        ]
+      },
+      "dialogue_modals": {
+        "definition": "Dialogue boxes (or modals) interrupt a user's workflow and demand action before the user can continue.",
+        "recommended": [
+          "Ask a simple question directly related to the user action.",
+          "Avoid indirect questions like “Are you sure” and instead reference the action they are trying to perform.",
+          "Explain in clear terms what will happen if they follow through.",
+          "Match the CTA to the header (answer the question), leaving no doubt what the CTA will trigger."
+        ]
+      },
+      "banner_alerts": {
+        "definition": "We use banners to inform users about changes that affect their ability to complete objectives.",
+        "used_for": [
+          "Confirmation a form has been submitted.",
+          "Status updates on pending or processing actions.",
+          "Changes to the platform that will change how a user interacts with it.",
+          "Contextual information a user should know before proceeding with their task."
+        ],
+        "recommended": [
+          "Card-level banners don't include headers.",
+          "If the banner is an error message, tell the user what’s gone wrong and how they can correct the error.",
+          "Let the user know what's happening to build trust. Don’t assume users know everything that's going on.",
+          "Add information to the link copy about what the user will find on the page.",
+          "If the alert blocks progress (e.g., in a modal), state what prevented them from moving forward and what to do next."
+        ]
+      },
+      "toasters": {
+        "definition": "Toasters are short messages that notify the user of the success or the failure of an action. They can be time delayed or dismissible and don’t need to be intrusive.",
+        "recommended": [
+          "Keep it short and clear.",
+          "Generic errors should inform the user something has gone wrong and encourage them to move forward."
+        ]
+      },
+      "page_errors": {
+        "403": {
+          "definition": "403s appear when a user doesn’t have access or permission to view a page.",
+          "recommended": [
+            "Inform users who can give them permission to access the page and direct them."
+          ]
+        },
+        "404": {
+          "definition": "404s appear when a user has stumbled across a page that either does not exist or could not load properly.",
+          "recommended": [
+            "Be as clear and concise as possible in the header.",
+            "The body should give guidance on possible solutions and what to do next.",
+            "Provide a CTA that allows users to take action on the solution."
+          ]
+        }
+      }
+    }
   }
 }

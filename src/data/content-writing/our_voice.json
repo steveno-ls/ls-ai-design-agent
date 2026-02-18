@@ -1,18 +1,179 @@
 {
-  "Our voice": {
-    "Principles": {
-      "Text should have a purpose": "Remove fluff. Each word must serve clarity and user progress.",
-      "Be explicit, be direct": "State things plainly. Avoid ambiguity and unnecessary politeness that hides meaning.",
-      "Focus on value and benefits, not features": "Explain why it matters. Users care about outcomes, not specs.",
-      "There is no default knowledge": "Never assume user expertise. Explain essentials without jargon.",
-      "Prefer the positive": "Phrase for confidence and success. Avoid fear\u2011based wording.",
-      "Success instead of fear, doubt and uncertainty": "Encourage and reassure. Celebrate progress, don't highlight failure."
+  "our_voice": {
+    "principles": {
+      "in_brief": [
+        "Text should have a purpose",
+        "Be explicit, be direct",
+        "Focus on value and benefits, not features",
+        "There is no default knowledge",
+        "Prefer the positive",
+        "Success instead of fear, doubt and uncertainty"
+      ],
+      "rules": [
+        {
+          "id": "purpose_only",
+          "name": "Text should have a purpose",
+          "do": [
+            "Remove text that does not help the user act, decide, or understand what happens next.",
+            "Prefer communicating through UI design when words are trying to explain what the UI should show."
+          ],
+          "dont": [
+            "Add text just to fill space or restate what the UI already makes clear."
+          ]
+        },
+        {
+          "id": "explicit_direct",
+          "name": "Be explicit, be direct",
+          "do": [
+            "Prioritize clarity over brevity.",
+            "Include key context needed to understand what happened and what to do next."
+          ],
+          "dont": ["Omit important details just to make copy shorter."]
+        },
+        {
+          "id": "value_over_features",
+          "name": "Focus on value and benefits, not features",
+          "do": [
+            "Describe what the user gains (time saved, impact, outcome).",
+            "Use the customer’s language and mental model."
+          ],
+          "dont": [
+            "Lead with internal feature names or technical implementation details."
+          ]
+        },
+        {
+          "id": "no_default_knowledge",
+          "name": "There is no default knowledge",
+          "do": [
+            "Assume the user may not know jargon, acronyms, or system behavior.",
+            "Explain unfamiliar terms or introduce acronyms before using them."
+          ],
+          "dont": ["Use unexplained acronyms, slang, or technical jargon."]
+        },
+        {
+          "id": "prefer_positive",
+          "name": "Prefer the positive",
+          "do": [
+            "Describe what the user can do and the path forward.",
+            "Use positive directives when possible."
+          ],
+          "dont": [
+            "Overemphasize restrictions, blocks, or limitations when an available path exists."
+          ]
+        },
+        {
+          "id": "success_over_fear",
+          "name": "Success instead of fear, doubt and uncertainty",
+          "do": [
+            "Reduce uncertainty with clear reassurance when appropriate.",
+            "Explain what will happen and what will not happen when that matters."
+          ],
+          "dont": [
+            "Use fear-based framing or language that increases doubt without offering a path forward."
+          ]
+        }
+      ]
     },
-    "Tone": {
-      "Be helpful": "Give clear guidance and next steps. Reduce cognitive effort.",
-      "Be empowering": "Make users feel capable. Language should support autonomy.",
-      "Be empathetic": "Acknowledge emotions in errors or friction. Use human warmth.",
-      "Be confident": "Write assertively. Avoid hedging words that reduce trust."
+
+    "tone": {
+      "primary_tone": "Be helpful",
+      "description": "Helpfulness may show up as empowering, empathetic, or confident depending on context.",
+      "modes": {
+        "empowering": {
+          "when_to_use": [
+            "Onboarding",
+            "Setup flows",
+            "Guidance messaging (in-app messaging)"
+          ],
+          "do": [
+            "Give guidance while keeping user agency.",
+            "Include supportive context (what happens next / where they can change it later)."
+          ],
+          "dont": [
+            "Over-instruct or imply the user must do something when it’s optional."
+          ],
+          "examples": {
+            "recommended": [
+              "Create and manage gift cards. Visit the Help Center to learn more about gift card features and options.",
+              "Turn off guest alerts. Guests won't receive notifications anymore. You can always enable them later on the Settings page."
+            ],
+            "not_recommended": [
+              "Create and manage gift cards. Use this section to set up your gift cards.",
+              "Disable guest alerts. Guests won't receive notifications anymore."
+            ]
+          }
+        },
+
+        "empathetic": {
+          "when_to_use": [
+            "Errors",
+            "Friction or learning moments",
+            "Potentially overwhelming onboarding steps"
+          ],
+          "do": [
+            "Keep the user calm with clear, uncluttered language.",
+            "Provide a viable next step when possible."
+          ],
+          "dont": [
+            "Use insincere interjections (for example, 'oops', 'yikes').",
+            "Use technical jargon."
+          ]
+        },
+
+        "confident": {
+          "when_to_use": [
+            "Add-on and feature descriptions",
+            "Explaining product behavior that requires trust",
+            "Upsell/benefit messaging"
+          ],
+          "do": [
+            "Emphasize user benefit and time saved.",
+            "Support trust with clear reasoning."
+          ],
+          "dont": [
+            "Be arrogant or imply we know the customer’s business better than they do.",
+            "Promise perfection.",
+            "Frame it like we’re doing the customer a favor."
+          ],
+          "notes": [
+            "Be careful with words like 'easy' since difficulty is subjective."
+          ]
+        }
+      }
+    },
+
+    "patterns": {
+      "empty_states": {
+        "do": [
+          "Explain why the feature exists and what the user gains.",
+          "Offer clear CTAs that move the user forward.",
+          "Invite rather than instruct."
+        ],
+        "dont": [
+          "Bark commands at the user.",
+          "Assume the user’s priorities or why they haven’t used a feature.",
+          "Assume what is easy for you is easy for them."
+        ]
+      },
+
+      "errors": {
+        "do": [
+          "Explain what happened in clear language.",
+          "Tell the user how to move forward when possible."
+        ],
+        "dont": [
+          "Use insincere filler like 'oops' or 'yikes'.",
+          "Use technical jargon."
+        ]
+      },
+
+      "onboarding": {
+        "do": [
+          "Reduce pressure by clarifying what can be done later.",
+          "Use empowering language that supports progress."
+        ],
+        "dont": ["Use imperative tone when actions aren’t imperative."]
+      }
     }
   }
 }

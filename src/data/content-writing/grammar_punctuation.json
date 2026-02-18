@@ -1,31 +1,289 @@
 {
-  "Grammar and punctuation": {
-    "Grammar": {
-      "Abbreviations and acronyms": "Spell out first use; avoid unnecessary acronyms. Maintain clarity.",
-      "Ampersands": "Use '&' only in UI constraints (buttons, labels). Prefer 'and' in sentences.",
-      "Articles (a, an, the)": "Use articles to improve readability and natural tone. Avoid omission for brevity.",
-      "Capitalization": "Follow sentence\u2011case for readability. Reserve title\u2011case for proper nouns and UI titles.",
-      "Contractions": "Use natural contractions for friendly tone. Avoid stiffness.",
-      "It's and its": "'It's' = 'it is'. 'Its' = possession. Avoid common confusion.",
-      "Noun stacks": "Limit consecutive nouns to avoid cognitive load. Use prepositions to clarify.",
-      "Plurals": "Pluralize naturally. Avoid jargon or awkward plural forms.",
-      "Spelling": "Use consistent regional spelling (likely US English). Avoid informal shortcuts.",
-      "Simple past vs. Present perfect": "Use simple past for completed actions; present perfect for recent relevance.",
-      "Syllable separation": "Hyphenate only where clarity improves. Avoid over\u2011hyphenation."
+  "grammar": {
+    "abbreviations_acronyms": {
+      "rules": [
+        "Spell out uncommon abbreviations and acronyms on first mention, followed by the abbreviation in parentheses.",
+        "Use the abbreviation alone after the first mention.",
+        "Do not use periods between letters in acronyms or initialisms.",
+        "Use periods in 'e.g.' and 'i.e.'.",
+        "Use a period after 'vs.'.",
+        "Use 'a' or 'an' based on pronunciation."
+      ],
+      "examples": {
+        "recommended": [
+          "End of Day (EOD)",
+          "HTML",
+          "Montreal, QC",
+          "Export as CSV file"
+        ],
+        "not_recommended": [
+          "H.T.M.L.",
+          "Montreal, Q.C.",
+          "Export as C.S.V. file"
+        ]
+      }
     },
-    "Punctuation": {
-      "Colons": "Use to introduce lists or clarifications. Avoid overuse.",
-      "Commas": "Support readability; use in lists and clauses. Avoid comma splices.",
-      "Dashes": "En dashes for ranges, em dashes for emphasis. Use sparingly.",
-      "Ellipses": "Use for unfinished thoughts, not pauses. Avoid dramatic overuse.",
-      "Emojis \ud83e\udd20": "Use sparingly and only when tone supports. Ensure accessibility.",
-      "Exclamation marks": "Use rarely. Avoid sounding unprofessional or emotional.",
-      "Hyphens": "Use to clarify compound terms. Avoid unnecessary connection.",
-      "Parentheses": "Use for clarifications. Avoid burying key info inside.",
-      "Periods": "End full thoughts cleanly. Avoid missing punctuation.",
-      "Possessives": "Follow standard possessive rules. Avoid awkward constructions.",
-      "Quotation marks": "Use for direct quotes and UI terms. Avoid scare quotes.",
-      "Semicolons": "Use to link related independent clauses. Avoid excessive formality."
+
+    "time_abbreviations": {
+      "rules": [
+        "Use shortest non-ambiguous abbreviations.",
+        "Abbreviated units are assumed plural.",
+        "Write out days, weeks, months and years where possible."
+      ],
+      "units": {
+        "millisecond": "ms",
+        "second": "sec",
+        "minute": "min",
+        "hour": "h",
+        "day": "d (write out when possible)",
+        "week": "wk (write out when possible)",
+        "month": "mo (write out when possible)",
+        "year": "yr (write out when possible)"
+      }
+    },
+
+    "ampersands": {
+      "rule": "Always spell out 'and'. Only use '&' when part of a proper noun or brand name."
+    },
+
+    "articles": {
+      "rules": [
+        "Use articles (a, an, the) for clarity.",
+        "Omit articles only when saving space (e.g., buttons)."
+      ]
+    },
+
+    "capitalization": {
+      "default": "Use sentence case almost everywhere.",
+      "rules": [
+        "Capitalize only the first word in headings and buttons unless proper noun.",
+        "Capitalize each list or menu item.",
+        "Capitalize first word in placeholder text and tooltips.",
+        "Do not capitalize first word after a colon.",
+        "Capitalize first word after a slash.",
+        "Do not use ALL CAPS.",
+        "Use title case only for product and feature names.",
+        "Capitalize 'Support' when referring to Lightspeed Support."
+      ]
+    },
+
+    "contractions": {
+      "rules": [
+        "Use common contractions (you're, won't).",
+        "Avoid awkward contractions (this’ll)."
+      ]
+    },
+
+    "its_vs_its": {
+      "rules": ["Use 'it's' for 'it is'.", "Use 'its' for possession."]
+    },
+
+    "noun_stacks": {
+      "rule": "Avoid noun stacks. Simplify phrases."
+    },
+
+    "plurals": {
+      "rules": [
+        "Pluralize file extensions with lowercase 's' (GIFs).",
+        "Do not use apostrophes in plurals.",
+        "Avoid brackets like product(s).",
+        "Prefer plural form when referring to singular and plural generically."
+      ]
+    },
+
+    "spelling": {
+      "rule": "Use American English spelling.",
+      "examples": {
+        "color_not_colour": true,
+        "flavor_not_flavour": true,
+        "neighbor_not_neighbour": true,
+        "center_not_centre": true,
+        "analyze_not_analyse": true
+      }
+    },
+
+    "tense_preference": {
+      "rule": "Prefer simple past over present perfect when addressing users."
+    },
+
+    "syllable_separation": {
+      "rule": "Never divide a word across lines. Reword instead."
+    }
+  },
+  "punctuation": {
+    "colons": {
+      "avoid_in_sentences": "Avoid using colons in sentences unless introducing lists or examples.",
+      "recommended_examples": [
+        "The app is compatible with the following terminals: Dejavoo, iZettle and Genius."
+      ],
+      "not_recommended_examples": [
+        "The app is compatible with the following terminals, Dejavoo, iZettle and Genius."
+      ],
+      "ui_labels": {
+        "rule": "Do not use a colon to indicate a text field, drop-down menu or button. Let the UI do the work.",
+        "recommended_examples": ["Select a country\nCanada 🔽"],
+        "not_recommended_examples": ["Select a country:\nCanada 🔽"]
+      }
+    },
+
+    "commas": {
+      "general": "Omit unnecessary commas. Use commas only when they improve clarity. Prefer shorter sentences over long comma-heavy sentences.",
+      "oxford_comma": {
+        "rule": "Avoid the Oxford (serial) comma in lists.",
+        "recommended_examples": [
+          "Her usual breakfast is coffee, eggs and fruit."
+        ],
+        "not_recommended_examples": [
+          "Her usual breakfast is coffee, eggs, and fruit."
+        ]
+      },
+      "greeting_comma": {
+        "rule": "Use a comma between a greeting and a name.",
+        "recommended_examples": ["Welcome back, Obama."],
+        "not_recommended_examples": ["Welcome back Obama."]
+      },
+      "break_up_sentences": {
+        "recommended_examples": [
+          "Explore the tutorial videos on our YouTube channel. Don't forget to review the checklist before launching."
+        ],
+        "not_recommended_examples": [
+          "Explore the tutorial videos on our YouTube channel, and don't forget to review the checklist before launching."
+        ]
+      }
+    },
+
+    "dashes": {
+      "em_dash": {
+        "rule": "Use em dashes (—) sparingly to offset an aside or indicate a break. Do not use spaces on either side. Never use two hyphens (--) in place of an em dash.",
+        "recommended_examples": [
+          "Lightspeed Payments—our newest initiative—can help you streamline your business."
+        ],
+        "not_recommended_examples": [
+          "Lightspeed Payments — our newest initiative — can help you streamline your business."
+        ]
+      },
+      "en_dash": {
+        "rule": "Use an en dash (–) to show a range in numbers, prices, dates or time. Do not use spaces on either side.",
+        "recommended_examples": [
+          "$100.00–120.00 per serving",
+          "Available January–March",
+          "12:00AM–12:05AM"
+        ],
+        "not_recommended_examples": [
+          "$100.00 – $120.00 per serving",
+          "Available January– March",
+          "12:00AM –12:05AM"
+        ]
+      }
+    },
+
+    "ellipses": {
+      "rule": "Use ellipses ( … ) sparingly to indicate trailing thought or omitted content. Do not use in titles, headers, placeholders, or for dramatic effect."
+    },
+
+    "emojis": {
+      "rule": "Do not use emojis in interface copy unless it’s part of in-app release communications or pop-up surveys."
+    },
+
+    "exclamation_marks": {
+      "rule": "Use exclamation points sparingly for celebratory moments. Never use exclamation points in error messages or important notices.",
+      "recommended_examples": ["Congratulations! You made your first sale."],
+      "not_recommended_examples": [
+        "Congratulations. You’ve made your first sale.",
+        "Log in to your store!"
+      ]
+    },
+
+    "hyphens": {
+      "rule": "Use hyphens (-) only to link words to avoid confusion. If unsure, check the glossary.",
+      "before_noun_rule": "Hyphenate a phrase when it comes before the thing it describes, but not when the thing it describes comes first.",
+      "recommended_examples": [
+        "This is an up-to-date account.",
+        "This account is up to date."
+      ],
+      "not_recommended_examples": [
+        "This is an up to date account.",
+        "This account is up-to-date."
+      ]
+    },
+
+    "parentheses": {
+      "rule": "Do not put important information in parentheses because readers may skim it. Use parentheses to introduce an abbreviation/acronym or to enclose an example.",
+      "plural_placeholders": {
+        "rule": "Write placeholder text in plural form without brackets.",
+        "recommended_examples": ["Tags"],
+        "not_recommended_examples": ["Tag(s)"]
+      }
+    },
+
+    "periods": {
+      "general": "Use periods after complete sentences or when more than one sentence is used. Titles/headings/subheadings only use a period when longer than one sentence.",
+      "placement": "Place periods and question marks inside closing quotation marks, but after parentheses.",
+      "use_a_period_for": [
+        "Complete sentences",
+        "Body text and descriptions",
+        "Captions",
+        "List items that are complete sentences",
+        "Helper text in forms",
+        "Error messages (body text)",
+        "Links that are part of a sentence"
+      ],
+      "do_not_use_a_period_for": [
+        "Sentence fragments",
+        "List items that are not complete sentences",
+        "Titles, headings and subheadings",
+        "Buttons",
+        "Notifications (toasts, alerts, banners)",
+        "Placeholder copy",
+        "Navigation menu items",
+        "Hover/tooltip copy",
+        "Inline error messages (helper text)",
+        "Icons"
+      ]
+    },
+
+    "possessives": {
+      "rule": "Use an apostrophe to make a word possessive. If the word is plural (ends with s), add an apostrophe. If a proper name ends with s, add apostrophe + s.",
+      "recommended_examples": [
+        "These are the developers’ computers.",
+        "This is Jess’s computer."
+      ],
+      "not_recommended_examples": [
+        "These are the developers’s computers.",
+        "This is Jess’ computer."
+      ]
+    },
+
+    "quotation_marks": {
+      "rule": "Prefer curly double quotes for quotations. Periods and commas go inside closing quotation marks. Colons, question marks, and exclamation points go outside unless part of the quote. Avoid single quotes except for nested quotes.",
+      "use_when": [
+        "Referring to UI words or phrases elsewhere",
+        "Directing the user to a new section or page",
+        "Indicating user-provided input (file paths, item names)",
+        "Referring to specific words and terms"
+      ],
+      "recommended_examples": [
+        "You’ll be asked “Are you sure you want to continue?“",
+        "Find more in “Reports.“",
+        "“Gift_Cards.csv“ not imported.",
+        "The word “Loyalty“ is reserved to the system."
+      ],
+      "not_recommended_examples": [
+        "You’ll be asked, Are you sure you want to continue?",
+        "Find more in Reports.",
+        "Gift_Cards.csv not imported.",
+        "The word Loyalty is reserved to the system."
+      ]
+    },
+
+    "semicolons": {
+      "rule": "Avoid semicolons. Prefer a period and start a new sentence.",
+      "recommended_examples": [
+        "Use the en dash with no spaces to show a range in numbers, dates or time. For example: January–March."
+      ],
+      "not_recommended_examples": [
+        "Use the en dash with no spaces to show a range in numbers, dates or time; for example: January–March."
+      ]
     }
   }
 }

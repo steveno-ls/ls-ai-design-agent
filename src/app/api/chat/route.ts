@@ -375,48 +375,52 @@ async function reviewFigmaFrame(args: { url: string }) {
     return raw;
   }
 
-const parsed = parseFigmaLink(safe);
-if (!parsed) return { error: "Could not parse Figma link (need node-id=...)" };
+  const parsed = parseFigmaLink(safe);
+  if (!parsed)
+    return { error: "Could not parse Figma link (need node-id=...)" };
 
-const { fileKey, nodeId } = parsed;
+  const { fileKey, nodeId } = parsed;
 
-const nodeIdApi = /^\d+-\d+$/.test(nodeId) ? nodeId.replace("-", ":") : nodeId;
+  const nodeIdApi = /^\d+-\d+$/.test(nodeId)
+    ? nodeId.replace("-", ":")
+    : nodeId;
 
-const raw = await fetchFigmaNode(fileKey, nodeIdApi);
+  const raw = await fetchFigmaNode(fileKey, nodeIdApi);
 
-const doc = raw?.nodes?.[nodeIdApi]?.document || raw?.nodes?.[nodeId]?.document;
+  const doc =
+    raw?.nodes?.[nodeIdApi]?.document || raw?.nodes?.[nodeId]?.document;
 
-if (!doc) {
+  if (!doc) {
+    return {
+      error: "Node not found in Figma response",
+      debug: {
+        fileKey,
+        nodeIdFromUrl: nodeId,
+        nodeIdApi,
+        returnedNodeKeys: Object.keys(raw?.nodes || {}),
+      },
+    };
+  }
+
+  const frameName = doc.name || "Frame";
+  const textParts: string[] = [];
+  collectText(doc, textParts);
+
+  const frameText = Array.from(
+    new Set(textParts.map((t) => t.trim()).filter(Boolean)),
+  ).join("\n");
+
+  const compParts: { type: string; name?: string }[] = [];
+  collectComponentUsage(doc, compParts);
+
   return {
-    error: "Node not found in Figma response",
-    debug: {
-      fileKey,
-      nodeIdFromUrl: nodeId,
-      nodeIdApi,
-      returnedNodeKeys: Object.keys(raw?.nodes || {}),
-    },
+    figmaUrl: safe,
+    fileKey,
+    nodeId: nodeIdApi, // ✅ optional: return the API-normalized node id
+    frameName,
+    frameText,
+    componentHits: compParts.slice(0, 200),
   };
-}
-
-const frameName = doc.name || "Frame";
-const textParts: string[] = [];
-collectText(doc, textParts);
-
-const frameText = Array.from(
-  new Set(textParts.map((t) => t.trim()).filter(Boolean)),
-).join("\n");
-
-const compParts: { type: string; name?: string }[] = [];
-collectComponentUsage(doc, compParts);
-
-return {
-  figmaUrl: safe,
-  fileKey,
-  nodeId: nodeIdApi, // ✅ optional: return the API-normalized node id
-  frameName,
-  frameText,
-  componentHits: compParts.slice(0, 200),
-};
 }
 
 // -------------------- Tool schema --------------------
@@ -577,14 +581,27 @@ function detectIntent(message: string): Intent {
   }
 
   const copySignals = [
+    // explicit “copy”
     "check this copy",
     "review this copy",
     "is this copy",
-    "is this wording",
-    "is this message",
     "rewrite",
     "reword",
     "microcopy",
+    "ui copy",
+
+    // ✅ explicit “content”
+    "check this content",
+    "review this content",
+    "is this content",
+    "check this text",
+    "review this text",
+    "is this text",
+    "check this message",
+    "review this message",
+    "is this message",
+
+    // common UX writing asks
     "tone",
     "grammar",
     "punctuation",
@@ -593,6 +610,15 @@ function detectIntent(message: string): Intent {
     "is this clear",
     "make this clearer",
     "shorten this",
+
+    // common UI strings (helps when people don’t say “copy”)
+    "error message",
+    "empty state",
+    "helper text",
+    "tooltip",
+    "banner",
+    "toast",
+    "notification",
   ];
 
   // NOTE: remove "figma" here so figma links don't get hijacked
@@ -681,7 +707,31 @@ export async function POST(req: Request) {
       message,
     );
 
-  const systemPrompt = `
+    const componentSystemPrompt = `
+You are a Helios design system assistant.
+
+You will help with components, tokens, and patterns.
+
+Rules:
+- Prefer existing Helios components/patterns before inventing new ones.
+- Use findComponentDetails(query) for component questions.
+- Output STRICT JSON only in this exact shape:
+
+{
+  "componentName": string,
+  "summary": string,
+  "usage": string,
+  "livePreviewCode": string | null
+}
+
+Critical:
+- If the user is asking about a component, ALWAYS attempt to return livePreviewCode.
+- livePreviewCode MUST be ONLY JSX (no backticks, no markdown), like:
+  "<Button appearance='primary'>Save</Button>"
+- If you truly cannot, return null.
+`;
+
+    const generalSystemPrompt = `
 You are a single assistant that helps with:
 1) Lightspeed Helios Design System / components / tokens / patterns
 2) Product design critique and UI suggestions
@@ -691,30 +741,8 @@ You must infer intent from the user's message.
 
 ### Helios Content Guidelines JSON
 ${JSON.stringify(contentGuidelines, null, 2)}
-
-## Design system rules
-- Prefer existing Helios components/patterns before inventing new ones.
-- If tool output contains docs.text, summarize it into usage. Do not invent usage guidance.
-- If docs.text is missing, say you couldn’t find documentation and fall back to general guidance.
-- Use findComponentDetails(query) for component questions.
-- Only set includeFigmaText=true if the user explicitly asks for guidance/copy/when-to-use text.
-
-# Output (STRICT)
-Return ONLY valid JSON with this shape:
-
-{
-  "componentName": string,
-  "summary": string,
-  "usage": string,
-  "livePreviewCode": string | null
-}
-
-Rules:
-- componentName should be the resolved component name from tools (if available), otherwise user query.
-- summary: 1–2 sentences.
-- usage: short bullets or short paragraphs. If docs.text exists, summarize that (do not invent).
-- livePreviewCode: If you can, output Helios component JSX only, e.g. "<Button appearance='primary'>Save</Button>". Otherwise null.
 `;
+
 
   if (isCopyReview) {
     const copyToReview = extractCopyCandidate(String(message || ""));
@@ -760,17 +788,17 @@ Rules:
     }
 
     const replyMarkdown = `
-    ## Copy review
-    **Verdict:** ${parsed.verdict === "pass" ? "✅ Pass" : "✏️ Needs revision"}
+## Copy review
+**Verdict:** ${parsed.verdict === "pass" ? "✅ Pass" : "✏️ Needs revision"}
 
-    ---
+---
 
-    ## Revised copy
-    "${parsed.revisedCopy}"
+## Revised copy
+"${parsed.revisedCopy}"
 
-    ---
+---
 
-    ## Why
+## Why
 ${reasons.map((r: string) => `- ${r}`).join("\n")}
 
 ---
@@ -907,10 +935,17 @@ ${
 
   // Build messages: system + prior user/assistant JSON-only + user
   const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
-    { role: "system", content: systemPrompt },
+    {
+      role: "system",
+      content:
+        intent === "COMPONENT_LOOKUP"
+          ? componentSystemPrompt
+          : generalSystemPrompt,
+    },
     ...history.map((m) => ({ role: m.role, content: m.content })),
     { role: "user", content: message },
   ];
+
 
   // Deterministic references gathered from tool output
   const gatheredRefs: {
